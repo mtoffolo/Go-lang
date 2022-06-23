@@ -7,13 +7,15 @@
 
 Estudo e projetos da _linguagem_ **Golang**
 
-```package main
+```golang 
+package main
 
 import "fmt"
 
 func main() {
 	fmt.Println("Seja Bem Vindo!")
-}```
+}
+```
 
 
 
