@@ -34,3 +34,11 @@ func main() {
 	1. Melhorar a Lógica do **Secret**
 	2.  Aumentar o tempo de validação do Token.
 2. Torna-lo Escalavél. 
+
+
+
+### Atividades:
+
+- [x] Melhorar a Lógica do **Secret** JWT.
+- [] Aumentar o tempo de validação do Token.
+- [] Tornar a a eplicação escalável.
