@@ -1,9 +1,21 @@
 
 ![Mascote GO](imagem/go.jpg)
 
+[Go](https://go.dev/)
+
 # Projetos em Golang
 
 Estudo e projetos da _linguagem_ **Golang**
+
+´´´package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Seja Bem Vindo!")
+}```
+
+
 
 ## Funcionabilidades
 
