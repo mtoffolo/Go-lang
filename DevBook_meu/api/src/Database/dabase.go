@@ -3,6 +3,7 @@ package database
 import (
 	"api/src/config"
 	"database/sql"
+	"fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -10,7 +11,7 @@ import (
 func Conectar() (*sql.DB, error) {
 
 	db, erro := sql.Open("postgres", config.StringConexaoBanco)
-
+	fmt.Println(config.StringConexaoBanco)
 	if erro != nil {
 		return nil, erro
 

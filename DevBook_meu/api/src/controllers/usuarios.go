@@ -2,10 +2,12 @@ package controllers
 
 import (
 	database "api/src/Database"
+	"api/src/autenticacao"
 	"api/src/model"
 	"api/src/repositorios"
 	"api/src/respostas"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -134,6 +136,23 @@ func AtualizadoUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+	usuarioIdnoToken, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+
+		return
+
+	}
+
+	if usuarioIdnoToken != usuarioID {
+
+		if erro != nil {
+			respostas.Erro(w, http.StatusForbidden, errors.New("Não é Possivel atualizar um usuário que não seja o seu! ANIMAL"))
+
+			return
+		}
+	}
 
 	corpoResquisicao, erro := ioutil.ReadAll(r.Body)
 
@@ -192,6 +211,23 @@ func DeletaUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+	usuarioIdnoToken, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+
+		return
+
+	}
+
+	if usuarioIdnoToken != usuarioID {
+
+		if erro != nil {
+			respostas.Erro(w, http.StatusForbidden, errors.New("Não é Possivel atualizar um usuário que não seja o seu! ANIMAL"))
+
+			return
+		}
+	}
 
 	db, erro := database.Conectar()
 
@@ -214,5 +250,51 @@ func DeletaUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+
+}
+
+func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
+	seguidorID, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+	parametros := mux.Vars(r)
+	fmt.Println(parametros)
+	//usuarioID, erro := strconv.ParseUint(parametros["UsuarioID"], 10, 64)
+
+	var usuarioID uint64 = 7
+
+	fmt.Println("usuarioID2", usuarioID)
+	if erro != nil {
+		respostas.Erro(w, http.StatusBadRequest, erro)
+		return
+	}
+
+	if seguidorID == usuarioID {
+
+		respostas.Erro(w, http.StatusBadRequest, errors.New("Você não pode ser seguir manézão!"))
+		return
+
+	}
+
+	db, erro := database.Conectar()
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusInternalServerError, erro)
+		return
+
+	}
+
+	repositorio := repositorios.NovoRepositorioDeUsuarios(db)
+
+	if erro := repositorio.Seguir(usuarioID, seguidorID); erro != nil {
+
+		respostas.Erro(w, http.StatusInternalServerError, erro)
+
+	}
+
+	respostas.JSON(w, http.StatusNoContent, nil)
 
 }

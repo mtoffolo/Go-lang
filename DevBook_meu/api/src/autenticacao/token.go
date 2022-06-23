@@ -12,12 +12,12 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func CriarToken(usuerioID int64) (string, error) {
+func CriarToken(usuarioID int64) (string, error) {
 
 	permissoes := jwt.MapClaims{}
 	permissoes["authorized"] = true
 	permissoes["exp"] = time.Now().Add(time.Hour * 6).Unix()
-	permissoes["usuerioID"] = usuerioID
+	permissoes["usuarioID"] = usuarioID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissoes)
 
 	return token.SignedString([]byte(config.SecretKey)) // secret
@@ -50,7 +50,7 @@ func ExtrairUsuarioID(r *http.Request) (uint64, error) {
 
 	if permissoes, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		usuarioID, erro := strconv.ParseUint(fmt.Sprintf("%0f", permissoes["usuarioID"]), 10, 64)
-
+		fmt.Println("Aqui -> ", usuarioID)
 		if erro != nil {
 			return 0, erro
 
@@ -75,7 +75,7 @@ func retornaChaveVerificacao(token *jwt.Token) (interface{}, error) {
 
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 
-		return nil, fmt.Errorf("Método de assinatura inesperado! %v", token.Header["alg"])
+		return nil, fmt.Errorf("metodo de assinatura inesperado! %v", token.Header["alg"])
 
 	}
 	return config.SecretKey, nil

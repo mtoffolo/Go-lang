@@ -41,3 +41,22 @@ CREATE TABLE publicacoes(
     curtidas int default 0,
     criadaEm timestamp default current_timestamp
 ) ENGINE=INNODB;
+
+
+create table seguidores (
+
+	usuario_id int not null,
+	CONSTRAINT fk_usuario
+	foreign key (usuario_id) references usuarios(id)
+	on delete cascade, 
+	
+	seguidor_id int not null,
+	CONSTRAINT fk_seguidor
+	foreign key (seguidor_id) references usuarios(id)
+	on delete cascade,
+	
+	primary key (usuario_id,seguidor_id)
+	
+	
+
+)
