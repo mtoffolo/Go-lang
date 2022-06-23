@@ -7,7 +7,7 @@
 
 Estudo e projetos da _linguagem_ **Golang**
 
-´´´package main
+```package main
 
 import "fmt"
 
